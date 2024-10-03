@@ -18,57 +18,60 @@ export default function Assignments() {
             <ul className="wd-assignment-list list-group rounded-0">
                 <li className="wd-assignment-list-item list-group-item p-3 ps-1">
                     <AssignmentControlButtons/>
-                    <a className="wd-assignment-link"
-                        href="#/Kanbas/Courses/1234/Assignments/123"
-                        style={{ color: "black", textDecoration: "none", marginLeft: "20px"}}>
-                        <strong>A1</strong>
+                    <div style={{marginLeft:"75px"}}>
+                        <a className="wd-assignment-link text-black"
+                            href="#/Kanbas/Courses/1234/Assignments/123"
+                            style={{textDecoration:"none"}}>
+                            <strong>A1</strong>
+                        </a>
                         <br/>
-                        <span style={{ marginLeft: "20px" }}>
-                            <span style={{color:"red"}}>Multiple Modules</span> | <strong>Not available until</strong> May 6 at 12:00 am |
-                        </span>
+                        <span><a className="wd-modules-list-link text-danger"
+                            href="https://www.google.com" style={{textDecoration:"none"}}>Multiple Modules</a> | <strong>Not available until</strong> May 6 at 12:00 am | </span>
                         <br />
-                        <span style={{ marginLeft: "75px" }}>
+                        <span>
                             <strong>Due</strong> May 13 at 11:59 pm | 100 pts
                         </span>
-                    </a>
+                    </div>
                 </li>
             </ul>
 
             <ul className="wd-assignment-list list-group rounded-0">
                 <li className="wd-assignment-list-item list-group-item p-3 ps-1">
                     <AssignmentControlButtons/>
-                    <a className="wd-assignment-link"
-                        href="#/Kanbas/Courses/1234/Assignments/456"
-                        style={{ color: "black", textDecoration: "none", marginLeft: "20px"}}>
-                        <strong>A2</strong>
+                    <div style={{marginLeft:"75px"}}>
+                        <a className="wd-assignment-link text-black"
+                            href="#/Kanbas/Courses/1234/Assignments/123"
+                            style={{textDecoration:"none"}}>
+                            <strong>A1</strong>
+                        </a>
                         <br/>
-                        <span style={{ marginLeft: "20px" }}>
-                            <span style={{color:"red"}}>Multiple Modules</span> | <strong>Not available until</strong> May 13 at 12:00 am |
-                        </span>
+                        <span><a className="wd-modules-list-link text-danger"
+                            href="https://www.google.com" style={{textDecoration:"none"}}>Multiple Modules</a> | <strong>Not available until</strong> May 6 at 12:00 am | </span>
                         <br />
-                        <span style={{ marginLeft: "75px" }}>
-                            <strong>Due</strong> May 20 at 11:59 pm | 100 pts
+                        <span>
+                            <strong>Due</strong> May 13 at 11:59 pm | 100 pts
                         </span>
-                    </a>
+                    </div>
                 </li>
             </ul>
 
             <ul className="wd-assignment-list list-group rounded-0">
                 <li className="wd-assignment-link list-group-item p-3 ps-1">
                     <AssignmentControlButtons/>
-                    <a className="wd-assignment-link"
-                        href="#/Kanbas/Courses/1234/Assignments/789"
-                        style={{ color: "black", textDecoration: "none", marginLeft: "20px"}}>
-                        <strong>A3</strong>
+                    <div style={{marginLeft:"75px"}}>
+                        <a className="wd-assignment-link text-black"
+                            href="#/Kanbas/Courses/1234/Assignments/123"
+                            style={{textDecoration:"none"}}>
+                            <strong>A1</strong>
+                        </a>
                         <br/>
-                        <span style={{ marginLeft: "20px" }}>
-                            <span style={{color:"red"}}>Multiple Modules</span> | <strong>Not available until</strong> May 20 at 12:00 am |
-                        </span>
+                        <span><a className="wd-modules-list-link text-danger"
+                            href="https://www.google.com" style={{textDecoration:"none"}}>Multiple Modules</a> | <strong>Not available until</strong> May 6 at 12:00 am | </span>
                         <br />
-                        <span style={{ marginLeft: "75px" }}>
-                            <strong>Due</strong> May 27 at 11:59 pm | 100 pts
+                        <span>
+                            <strong>Due</strong> May 13 at 11:59 pm | 100 pts
                         </span>
-                    </a>
+                    </div>
                 </li>
             </ul>
 
