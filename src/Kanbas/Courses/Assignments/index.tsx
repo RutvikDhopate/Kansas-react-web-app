@@ -2,6 +2,7 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import AssignmentControls from "./AssignmentControls";
 import { BsGripVertical } from "react-icons/bs";
 import AssignmentControlButtons from "./AssignmentControlButtons";
+import { RiArrowDropDownFill } from "react-icons/ri";
 export default function Assignments() {
     return (
       <div id="wd-assignments" style={{marginLeft:"20px", marginRight:"20px"}}>
@@ -9,7 +10,8 @@ export default function Assignments() {
         <ul id="wd-assignment-title" className="list-group rounded-0">
             <li className="wd-assignment-title list-group-item p-0 mb-5 fs-5 border-gray">
             <div className="wd-assignment-title p-3 ps-2 bg-secondary">
-                <BsGripVertical className="me-2 fs-3"/>
+                <BsGripVertical className="me-1 fs-3"/>
+                <RiArrowDropDownFill className="me-2 fs-1" type="button"/>
                 ASSIGNMENTS
                 <IoEllipsisVertical className="float-end fs-3"/>
                 <button className="float-end" style={{ border: "none", background: "none", outline: "none" }}>+</button>
