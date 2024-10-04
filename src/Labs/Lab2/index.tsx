@@ -17,6 +17,7 @@ import BootstrapTables from "./BootstrapTables";
 import BootstrapLists from "./BootstrapLists";
 import BootstrapForms from "./BootstrapForms";
 import BootstrapNavigation from "./BootstrapNavigation";
+import AbsolutePosition from "./AbsolutePositions";
 export default function Lab2() {
     return (
       <div id="wd-lab2" className="container">
@@ -93,6 +94,9 @@ export default function Lab2() {
         <div id="wd-css-positions">
             <Positions/>
         </div>
+
+        <AbsolutePosition/>
+
 
         <div id="wd-z-index">
             <Zindex/>
