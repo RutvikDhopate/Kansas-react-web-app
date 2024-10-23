@@ -6,7 +6,7 @@ import Lab3 from "./Lab3";
 export default function Labs() {
   return (
     <div id="wd-labs">
-      <h1 className="text-center"> Rutvik Dhopate</h1>
+      <h6 className="text-center"> Rutvik Dhopate</h6>
       <h2 className="text-center"> Section 2</h2>
       <h3> Source Code</h3>
         Please click here 

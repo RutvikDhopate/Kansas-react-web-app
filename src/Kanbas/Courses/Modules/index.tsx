@@ -15,7 +15,7 @@ export default function Modules() {
             </select><button>+ Module</button> */}
             {/* Implement Collapse All button, View Progress button, etc. */}
             <ModulesControls /><br /><br /><br /><br />
-            <ul id="wd-modules" className="list-group rounded-0">
+            <ul id="wd-modules" className="list-group rounded-0 w-100">
                 {modules
                 .filter((module: any) => module.course === cid)
                 .map((module: any) => (
