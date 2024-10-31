@@ -5,12 +5,42 @@ import AssignmentControlButtons from "./AssignmentControlButtons";
 import { RiArrowDropDownFill } from "react-icons/ri";
 import { useParams } from "react-router";
 import * as db from "../../Database";
+import { addAssignment, deleteAssignment, updateAssignment } from "./reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 export default function Assignments() {
-    const { cid } = useParams();
-    const assignments = db.assignments;
+    function formatDate(dateString: string) {
+        const date = new Date(dateString);
+        return `${date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })} at ${date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}`;
+    }
+    const { cid, aid } = useParams();
+    const { assignments }  = useSelector((state: any) => state.assignmentsReducer);
+    const [assignmentName, setAssignmentName] = useState("");
+    const [description, setDescription] = useState("");
+    const [points, setPoints] = useState("");
+    const [dueDate, setDueDate] = useState("");
+    const [availableDate, setAvailableDate] = useState("");
+    const dispatch = useDispatch();
     return (
         <div id="wd-assignments" style={{marginLeft:"20px", marginRight:"20px"}}>
-            <AssignmentControls/><br /><br /><br />
+            <AssignmentControls 
+                setAssignmentName={setAssignmentName} 
+                assignmentName={assignmentName}
+                points={points} 
+                setPoints={setPoints}
+                description={description}
+                setDescription={setDescription}
+                dueDate={dueDate}
+                setDueDate={setDueDate}
+                availableDate={availableDate}
+                setAvailableDate={setAvailableDate}
+                addAssignment={() => {dispatch(addAssignment({title: assignmentName, course: cid, description: description, points: points, dueDate: dueDate, availableDate: availableDate}));
+                setAssignmentName("");
+                setDescription("");
+                setPoints("");
+                setDueDate("");
+                setAvailableDate("");
+                }}/><br /><br /><br />
             <ul id="wd-assignment-title" className="list-group rounded-0">
                 <li className="wd-assignment-title list-group-item p-0 mb-5 fs-5 border-gray">
                 <div className="wd-assignment-title p-3 ps-2 bg-secondary">
@@ -26,7 +56,9 @@ export default function Assignments() {
                     .filter((assignment: any) => assignment.course === cid)
                     .map((assignment: any) => (
                         <li className="wd-assignment-list-item list-group-item p-3 ps-1 wd-lesson">
-                            <AssignmentControlButtons/>
+                            <AssignmentControlButtons
+                                assignmentId={assignment._id}
+                                deleteAssignment={(assignmentId) => dispatch(deleteAssignment(assignmentId))}/>
                             <div style={{marginLeft:"75px"}}>
                                 <a className="wd-assignment-link text-black"
                                     href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
@@ -35,10 +67,10 @@ export default function Assignments() {
                                 </a>
                                 <br/>
                                 <span><a className="wd-modules-list-link text-danger"
-                                    href="https://www.google.com" style={{textDecoration:"none"}}>Multiple Modules</a> | <strong>Not available until</strong> May 6 at 12:00 am | </span>
+                                    href="https://www.google.com" style={{textDecoration:"none"}}>Multiple Modules</a> | <strong>Not available until</strong> {formatDate(assignment.availableDate)} | </span>
                                 <br />
                                 <span>
-                                    <strong>Due</strong> May 13 at 11:59 pm | 100 pts
+                                    <strong>Due</strong> {formatDate(assignment.dueDate)} | {assignment.points} pts
                                 </span>
                             </div>
                         </li>
