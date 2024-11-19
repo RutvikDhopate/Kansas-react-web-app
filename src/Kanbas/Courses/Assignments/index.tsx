@@ -3,11 +3,13 @@ import AssignmentControls from "./AssignmentControls";
 import { BsGripVertical } from "react-icons/bs";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import { RiArrowDropDownFill } from "react-icons/ri";
-import { useParams } from "react-router";
-import * as db from "../../Database";
-import { addAssignment, deleteAssignment, updateAssignment } from "./reducer";
+import { useParams, useNavigate } from "react-router";
+// import * as db from "../../Database";
+import { setAssignments, addAssignment, deleteAssignment, updateAssignment } from "./reducer";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 export default function Assignments() {
     function formatDate(dateString: string) {
         const date = new Date(dateString);
@@ -20,7 +22,34 @@ export default function Assignments() {
     const [points, setPoints] = useState("");
     const [dueDate, setDueDate] = useState("");
     const [availableDate, setAvailableDate] = useState("");
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const fetchAssignments = async () => {
+        const assignments = await coursesClient.findAssignmentsForCourse(cid as string);
+        dispatch(setAssignments(assignments));
+    };
+    useEffect(() => {
+        fetchAssignments();
+    }, []);
+
+    const createAssignmentForCourse = async () => {
+        if (!cid) return;
+        const newAssignment = {title: assignmentName, course: cid, description: description, points: points, dueDate: dueDate, availableDate: availableDate}
+        const assignment = await coursesClient.createAssignmentForCourse(cid, newAssignment);
+        dispatch(addAssignment(assignment));
+    };
+
+    const removeAssignment = async (assignmentId: string) => {
+        await assignmentsClient.deleteAssignment(assignmentId);
+        dispatch(deleteAssignment(assignmentId));
+    };
+
+    const saveAssignment = async (assignment: any) => {
+        await assignmentsClient.updateAssignment(assignment);
+        dispatch(updateAssignment(assignment));
+    };
+
     return (
         <div id="wd-assignments" style={{marginLeft:"20px", marginRight:"20px"}}>
             <AssignmentControls 
@@ -34,13 +63,14 @@ export default function Assignments() {
                 setDueDate={setDueDate}
                 availableDate={availableDate}
                 setAvailableDate={setAvailableDate}
-                addAssignment={() => {dispatch(addAssignment({title: assignmentName, course: cid, description: description, points: points, dueDate: dueDate, availableDate: availableDate}));
-                setAssignmentName("");
-                setDescription("");
-                setPoints("");
-                setDueDate("");
-                setAvailableDate("");
-                }}/><br /><br /><br />
+                addAssignment={createAssignmentForCourse}
+                // addAssignment={() => {dispatch(addAssignment({title: assignmentName, course: cid, description: description, points: points, dueDate: dueDate, availableDate: availableDate}));
+                // setAssignmentName("");
+                // setDescription("");
+                // setPoints("");
+                // setDueDate("");
+                // setAvailableDate("");}}
+                /><br /><br /><br />
             <ul id="wd-assignment-title" className="list-group rounded-0">
                 <li className="wd-assignment-title list-group-item p-0 mb-5 fs-5 border-gray">
                 <div className="wd-assignment-title p-3 ps-2 bg-secondary">
@@ -53,16 +83,19 @@ export default function Assignments() {
                 </div>
                 <ul className="wd-assignment-list list-group rounded-0">
                     {assignments
-                    .filter((assignment: any) => assignment.course === cid)
+                    // .filter((assignment: any) => assignment.course === cid)
                     .map((assignment: any) => (
                         <li className="wd-assignment-list-item list-group-item p-3 ps-1 wd-lesson">
                             <AssignmentControlButtons
                                 assignmentId={assignment._id}
-                                deleteAssignment={(assignmentId) => dispatch(deleteAssignment(assignmentId))}/>
+                                deleteAssignment={(assignmentId) => removeAssignment(assignmentId)}/>   
                             <div style={{marginLeft:"75px"}}>
                                 <a className="wd-assignment-link text-black"
-                                    href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
-                                    style={{textDecoration:"none"}}>
+                                    // href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                                    style={{textDecoration:"none"}}
+                                    // onClick={() => fetchAssignmentDetails(assignment._id)}
+                                    onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`)}
+                                >
                                     <strong>{assignment._id}-{assignment.title}</strong>
                                 </a>
                                 <br/>

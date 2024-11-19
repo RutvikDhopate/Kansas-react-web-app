@@ -1,23 +1,48 @@
 import { RiArrowDropDownFill } from "react-icons/ri";
 import { useNavigate, useParams } from "react-router-dom";
-import * as db from "../../Database";
+// import * as db from "../../Database";
 import { updateAssignment } from "./reducer";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as assignmentsClient from "./client";
 export default function AssignmentEditor() {
     const { cid, aid } = useParams();
-    const assignments = db.assignments;
-    const assignment = assignments.find((assignment) => assignment.course === cid && assignment._id === aid);
+    // const assignments = db.assignments;
     
+    // const assignment = assignments.find((assignment) => assignment.course === cid && assignment._id === aid);
+    
+    const fetchAssignmentDetails = async (assignmentId: string) => {
+
+        const assignment = await assignmentsClient.getAssignmentById(assignmentId);
+        setAssignmentName(assignment.title);
+        setDescription(assignment.description);
+        setPoints(assignment.points);
+        setDueDate(assignment.dueDate);
+        setAvailableDate(assignment.availableDate);
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        if (aid) {
+            fetchAssignmentDetails(aid)
+        }
+    }, [aid]);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [assignmentName, setAssignmentName] = useState(assignment?.title);
-    const [description, setDescription] = useState(assignment?.description);
-    const [points, setPoints] = useState(assignment?.points);
-    const [dueDate, setDueDate] = useState(assignment?.dueDate);
-    const [availableDate, setAvailableDate] = useState(assignment?.availableDate);
+    const [assignmentName, setAssignmentName] = useState("");
+    const [description, setDescription] = useState("");
+    const [points, setPoints] = useState("");
+    const [dueDate, setDueDate] = useState("");
+    const [availableDate, setAvailableDate] = useState("");
+    const [loading, setLoading] = useState(true)
+    
 
-    if (!assignment){
+    const saveAssignment = async (assignment: any) => {
+        await assignmentsClient.updateAssignment(assignment);
+        dispatch(updateAssignment(assignment));
+    };
+    if (loading){
         return <div>Assignment not found</div>
     }
     return (
@@ -41,7 +66,7 @@ export default function AssignmentEditor() {
                 </div>
                 <div className="w-50 pe-3">
                     <input id="wd-points" value={points} className="form-control mb-2"
-                    onChange={(e) => setPoints(Number(e.target.value))}/>
+                    onChange={(e) => setPoints(e.target.value)}/>
                 </div>
             </div>
             <br />
@@ -158,15 +183,13 @@ export default function AssignmentEditor() {
             <div className="pe-3">
                 <button id="wd-assignment-save" className="btn btn-danger float-end"
                 onClick={() => {
-                    dispatch(updateAssignment({
-                        _id: assignment._id,
-                        title: assignmentName,
-                        description: description,
-                        points: points,
-                        dueDate: dueDate,
-                        availableDate: availableDate,
-                        course: cid
-                    }));
+                    saveAssignment({_id: aid,
+                            title: assignmentName,
+                            description: description,
+                            points: points,
+                            dueDate: dueDate,
+                            availableDate: availableDate,
+                            course: cid})
                     navigate(`/Kanbas/Courses/${cid}/Assignments`);
                 }}
                 >
