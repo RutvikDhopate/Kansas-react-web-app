@@ -37,6 +37,7 @@ export default function Dashboard(
 
                 const enrolledCourses = await fetchEnrollmentsForUser(currentUser._id);
                 // setDisplayedCourses(enrolledCourses);
+                console.log(enrolledCourses);
                 
                 const enrolledCourseDetails = allCoursesData.filter((course: any) => 
                     enrolledCourses.some((enrollment: any) => enrollment.course === course._id)
@@ -108,7 +109,7 @@ export default function Dashboard(
                 <h2 id="wd-dashboard-published">Published Courses {displayedCourses.length/*courses.filter((course) => enrollments.some((enrollment) => enrollment.user === currentUser._id && enrollment.course === course._id)).length*/}</h2> <hr />
                 <div id="wd-dashboard-courses" className="row">
                     <div className="row row-cols-1 row-cols-md-5 g-4">
-                        {courses
+                        {displayedCourses
                             // .filter((course) =>
                             //     enrollments.some(
                             //     (enrollment) =>
@@ -209,7 +210,7 @@ export default function Dashboard(
                     ) :
                     (
                         <div className="row row-cols-1 row-cols-md-5 g-4">
-                            {courses
+                            {displayedCourses
                                 .filter(
                                     (course) => enrollmentStatus[course._id]
                                 )
