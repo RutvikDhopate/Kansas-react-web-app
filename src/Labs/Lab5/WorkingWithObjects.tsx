@@ -22,7 +22,7 @@ export default function WorkingWithObjects() {
                 Update Assignment Title
             </a>
             <input className="form-control w-75" id="wd-assignment-title"
-                    defaultValue={assignment.title} onChange={(e) => setAssignment({...assignment, title: e.target.value})}/>
+                    value={assignment.title} onChange={(e) => setAssignment({...assignment, title: e.target.value})}/>
             <hr />
 
             <a id="wd-update-assignment-score" className="btn btn-primary float-end"
@@ -30,11 +30,11 @@ export default function WorkingWithObjects() {
                 Update Assignment Score
             </a>
             <input className="form-control w-75" id="wd-assignment-score" type="number"
-                    defaultValue={assignment.score} onChange={(e) => setAssignment({...assignment, score: parseInt(e.target.value)})}/>
+                    value={assignment.score} onChange={(e) => setAssignment({...assignment, score: parseInt(e.target.value)})}/>
             <hr />
 
             <a id="wd-update-assignment-completed" className="btn btn-primary float-end"
-            href={`${ASSIGNMENT_API_URL}/score/${assignment.completed}`}>
+            href={`${ASSIGNMENT_API_URL}/completed/${assignment.completed}`}>
                 Update Assignment Completed
             </a>
             <input className="form-check" id="wd-assignment-completed" type="checkbox"
@@ -47,7 +47,7 @@ export default function WorkingWithObjects() {
                 Update Module Name
             </a>
             <input className="form-control w-75" id="wd-module-name"
-                    defaultValue={module.name} onChange={(e) => setModule({...module, name: e.target.value})}/>
+                    value={module.name} onChange={(e) => setModule({...module, name: e.target.value})}/>
             <hr />
 
             <a id="wd-update-module-description" className="btn btn-primary float-end"
@@ -55,7 +55,7 @@ export default function WorkingWithObjects() {
                 Update Module Description
             </a>
             <input className="form-control w-75" id="wd-module-description"
-                    defaultValue={module.description} onChange={(e) => setModule({...module, description: e.target.value})}/>
+                    value={module.description} onChange={(e) => setModule({...module, description: e.target.value})}/>
             <hr />
 
             <h4>Retrieving Objects</h4>
