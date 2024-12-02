@@ -36,7 +36,7 @@ export default function Dashboard(
 
         useEffect(() => {
             const fetchData = async () => {
-                const allCoursesData = await fetchAllCourses()
+                const allCoursesData = await fetchAllCourses();
                 setAllCourses(allCoursesData);
 
                 // const userEnrollments = await fetchEnrollmentsForUser(currentUser._id);
@@ -150,6 +150,7 @@ export default function Dashboard(
                                     <button onClick={(event) => {
                                         event.preventDefault();
                                         deleteCourse(course._id);
+                                        setCourses((prev: any) => prev.filter((c: any) => c._id !== course._id));
                                     }} className="btn btn-danger float-end" id="wd-delete-course-click">
                                         Delete
                                     </button>
@@ -215,6 +216,7 @@ export default function Dashboard(
                                     <button onClick={(event) => {
                                         event.preventDefault();
                                         deleteCourse(course._id);
+                                        setCourses((prev: any) => prev.filter((c: any) => c._id !== course._id));
                                     }} className="btn btn-danger float-end" id="wd-delete-course-click">
                                         Delete
                                     </button>
