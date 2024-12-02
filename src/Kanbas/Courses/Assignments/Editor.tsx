@@ -14,6 +14,7 @@ export default function AssignmentEditor() {
     const fetchAssignmentDetails = async (assignmentId: string) => {
 
         const assignment = await assignmentsClient.getAssignmentById(assignmentId);
+        // console.log(assignment);
         setAssignmentName(assignment.title);
         setDescription(assignment.description);
         setPoints(assignment.points);
@@ -189,7 +190,7 @@ export default function AssignmentEditor() {
                             points: points,
                             dueDate: dueDate,
                             availableDate: availableDate,
-                            course: cid})
+                            })
                     navigate(`/Kanbas/Courses/${cid}/Assignments`);
                 }}
                 >

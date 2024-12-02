@@ -1,11 +1,29 @@
 import { FaUserCircle } from "react-icons/fa";
 import PeopleDetails from "./Details";
 import { Link } from "react-router-dom";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import * as courseClient from "../client";
+import { useEffect, useState } from "react";
 // import * as db from "../../Database";
 
 export default function PeopleTable({ users = [] }: { users?: any[] }) {
-    // const { cid } = useParams();
+    const { cid } = useParams();
+    const [userss, setUserss] = useState<any[]>([]);
+    
+    useEffect(() => {
+        const fetchEnrollmentsForCourse = async () => {
+            if (cid) {
+                try {
+                    const enrolledUsers = await courseClient.findUsersForCourse(cid)
+                    setUserss(enrolledUsers);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        };
+        fetchEnrollmentsForCourse();
+    }, [cid]);
+    
     // const { users, enrollments } = db;
     return (
         <div id="wd-people-table">
@@ -15,7 +33,7 @@ export default function PeopleTable({ users = [] }: { users?: any[] }) {
                 <tr><th>Name</th><th>Login ID</th><th>Section</th><th>Role</th><th>Last Activity</th><th>Total Activity</th></tr>
                 </thead>
                 <tbody>
-                    {users
+                    {userss
                         // .filter((usr) => 
                         //     enrollments.some((enrollment) => enrollment.user === usr._id && enrollment.course === cid))
                             .map((user: any) => (
