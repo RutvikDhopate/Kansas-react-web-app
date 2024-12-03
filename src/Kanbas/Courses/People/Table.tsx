@@ -24,6 +24,7 @@ export default function PeopleTable({ users = [] }: { users?: any[] }) {
         fetchEnrollmentsForCourse();
     }, [cid]);
     
+    const displayUsers = cid ? userss : users
     // const { users, enrollments } = db;
     return (
         <div id="wd-people-table">
@@ -33,7 +34,7 @@ export default function PeopleTable({ users = [] }: { users?: any[] }) {
                 <tr><th>Name</th><th>Login ID</th><th>Section</th><th>Role</th><th>Last Activity</th><th>Total Activity</th></tr>
                 </thead>
                 <tbody>
-                    {userss
+                    {displayUsers
                         // .filter((usr) => 
                         //     enrollments.some((enrollment) => enrollment.user === usr._id && enrollment.course === cid))
                             .map((user: any) => (
