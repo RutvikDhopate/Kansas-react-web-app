@@ -33,7 +33,7 @@ export default function Quizzes() {
 
     const createQuizForCourse = async () => {
         if (!cid) return;
-        const newQuiz = {title: quizName, courseId: cid, description: description, points: points, dueDate: dueDate, availableDate: availableDate,
+        const newQuiz = {title: quizName, courseId: cid, description: description, points: points, dueDate: dueDate, availabilityDate: availabilityDate,
                                 quizType: quizType, timeLimit: timeLimit, assignmentGroup: assignmentGroup, shuffleForEachStudent: shuffleForEachStudent,
                                 allowMultipleAttempts: allowMultipleAttempts, isPublished: isPublished, viewResponse: viewResponse, showCorrectAnswers: showCorrectAnswers,
                                 accessCode: accessCode, singleQuestionAtATime: singleQuestionAtATime, cameraRequired: cameraRequired, lockQuestionsAfterAnswering: lockQuestionsAfterAnswering
@@ -51,7 +51,7 @@ export default function Quizzes() {
     const [points, setPoints] = useState("");
     const [description, setDescription] = useState("");
     const [dueDate, setDueDate] = useState("");
-    const [availableDate, setAvailableDate] = useState("");
+    const [availabilityDate, setAvailabilityDate] = useState("");
     const [quizType, setQuizType] = useState("Graded Quiz");
     const [timeLimit, setTimeLimit] = useState("");
     const [assignmentGroup, setAssignmentGroup] = useState("");
@@ -76,8 +76,8 @@ export default function Quizzes() {
             setDescription={setDescription}
             dueDate={dueDate}
             setDueDate={setDueDate}
-            availableDate={availableDate}
-            setAvailableDate={setAvailableDate}
+            availabilityDate={availabilityDate}
+            setAvailabilityDate={setAvailabilityDate}
             quizType={quizType}
             setQuizType={setQuizType}
             timeLimit={timeLimit}

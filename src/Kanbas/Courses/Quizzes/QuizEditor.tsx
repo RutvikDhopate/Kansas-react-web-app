@@ -12,8 +12,21 @@ export default function QuizEditor() {
         const quiz = await quizzesClient.getQuizById(quizId);
         setQuizName(quiz.title);
         setPoints(quiz.points);
+        setDescription(quiz.description);
         setDueDate(quiz.dueDate);
-        setAvailableDate(quiz.availableDate);
+        setAvailabilityDate(quiz.availabilityDate);
+        setQuizType(quiz.quizType);
+        setTimeLimit(quiz.timeLimit);
+        setAssignmentGroup(quiz.assignmentGroup);
+        setShuffleForEachStudent(quiz.shuffleForEachStudent);
+        setAllowMultipleAttempts(quiz.allowMultipleAttempts);
+        setIsPublished(quiz.isPublished);
+        setViewResponse(quiz.viewResponse);
+        setShowCorrectAnswers(quiz.showCorrectAnswers);
+        setAccessCode(quiz.accessCode);
+        setSingleQuestionAtATime(quiz.singleQuestionAtATime);
+        setCameraRequired(quiz.cameraRequired);
+        setLockQuestionsAfterAnswering(quiz.lockQuestionsAfterAnswering);
         setLoading(false);
     };
 
@@ -28,8 +41,21 @@ export default function QuizEditor() {
 
     const [quizName, setQuizName] = useState("");
     const [points, setPoints] = useState("");
+    const [description, setDescription] = useState("");
     const [dueDate, setDueDate] = useState("");
-    const [availableDate, setAvailableDate] = useState("");
+    const [availabilityDate, setAvailabilityDate] = useState("");
+    const [quizType, setQuizType] = useState("Graded Quiz");
+    const [timeLimit, setTimeLimit] = useState("");
+    const [assignmentGroup, setAssignmentGroup] = useState("");
+    const [shuffleForEachStudent, setShuffleForEachStudent] = useState(false);
+    const [allowMultipleAttempts, setAllowMultipleAttempts] = useState(false);
+    const [isPublished, setIsPublished] = useState(false);
+    const [viewResponse, setViewResponse] = useState("Always");
+    const [showCorrectAnswers, setShowCorrectAnswers] = useState("Immediately");
+    const [accessCode, setAccessCode] = useState("");
+    const [singleQuestionAtATime, setSingleQuestionAtATime] = useState(false);
+    const [cameraRequired, setCameraRequired] = useState(false);
+    const [lockQuestionsAfterAnswering, setLockQuestionsAfterAnswering] = useState(false);
     const [loading, setLoading] = useState(true)
     
 
@@ -47,116 +73,194 @@ export default function QuizEditor() {
             <br />
             <input id="wd-name" value={quizName} className="form-control mb-2"
             onChange={(e) => setQuizName(e.target.value)}/><br />
-            {/* <textarea id="wd-description" rows={10} cols={50} className="form-control mb-2" 
+            <textarea id="wd-description" rows={10} cols={50} className="form-control mb-2" 
             value={description} onChange={(e) => setDescription(e.target.value)}>
-            </textarea> */}
+            </textarea>
             
             <br />
             <br />
 
             <div >
-            <div className="d-flex">
-                <div className="w-50 pe-5">
-                    <label htmlFor="wd-points" className="float-end" style={{marginTop:"5px"}}>Points</label>
-                </div>
-                <div className="w-50 pe-3">
-                    <input id="wd-points" value={points} className="form-control mb-2"
-                    onChange={(e) => setPoints(e.target.value)}/>
-                </div>
-            </div>
-            
-            <br />
-            <br />
-
-            <div className="d-flex">
-                <div className="w-50 pe-5">
-                <label htmlFor="wd-display-grade-as" className="float-end" style={{marginTop:"5px"}}>Display Grade as</label>
-                </div>
-                <div className="w-50 pe-3" style={{position:"relative"}}>
-                    <select name="display-grade" id="wd-display-grade-as" className="form-control mb-2">
-                        <option value="VAL1">Percentage</option>
-                        <option value="VAL1">Option 2</option>
-                    </select>
-                    <RiArrowDropDownFill className="fs-1" style={{position:"absolute", top:"1%", right:"3%", pointerEvents:"none"}}/>
-                </div>
-            </div>
-            <br />
-            
-            <div className="d-flex ps-3 pe-3" >
-                <div className="w-50 pe-5">
-                <label htmlFor="wd-submission-type" className="float-end" style={{marginTop:"5px"}}>Submission Type</label>
-                </div>
-                <div className="w-50 border p-3">
-                    <div style={{position:"relative"}}>
-                    <select name="submission-type" id="wd-submission-type" className="form-control mb-2">
-                        <option value="VAL1">Online</option>
-                        <option value="VAL1">Option 2</option>
-                    </select>
-                    <RiArrowDropDownFill className="fs-1" style={{position:"absolute", top:"1%", right:"1%", pointerEvents:"none"}}/>
+                {/* Points */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-points" className="float-end" style={{marginTop:"5px"}}>Points</label>
                     </div>
-
-                    <br />
-
-                    <div>
-                    <label htmlFor="wd-entry-checkbox-type" ><strong>Online Entry Options</strong></label>
-                    <br />
-                    <br />
-                    <input type="checkbox" name="check-entry" id="wd-text-entry" className="form-check-input"/>
-                    <label htmlFor="wd-text-entry" className="form-check-label ps-3 mb-2">Text Entry</label><br />
-
-                    <input type="checkbox" name="check-entry" id="wd-website-url" className="form-check-input"/>
-                    <label htmlFor="wd-website-url" className="form-check-label ps-3 mb-2">Website URL</label><br/>
-
-                    <input type="checkbox" name="check-entry" id="wd-media-recording" className="form-check-input"/>
-                    <label htmlFor="wd-media-recording" className="form-check-label ps-3 mb-2">Media Recordings</label><br/>
-
-                    <input type="checkbox" name="check-entry" id="wd-student-annotation" className="form-check-input"/>
-                    <label htmlFor="wd-student-annotation" className="form-check-label ps-3 mb-2">Student Annotations</label><br />
-
-                    <input type="checkbox" name="check-entry" id="wd-file-upload" className="form-check-input"/>
-                    <label htmlFor="wd-file-upload" className="form-check-label ps-3">File Uploads</label><br />
+                    <div className="w-50 pe-3">
+                        <input id="wd-points" value={points} className="form-control mb-2"
+                        onChange={(e) => setPoints(e.target.value)}/>
                     </div>
                 </div>
-            </div>
-            <br />
-            
-            <div className="d-flex ps-3 pe-3" >
-                <div className="w-50 pe-5">
-                <label htmlFor="wd-assign-to" className="float-end" style={{marginTop:"5px"}}> Assign</label> 
+                <br />
+
+                {/* Quiz Type */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-quiz-type" className="float-end" style={{marginTop:"5px"}}>Quiz Type</label>
+                    </div>
+                    <div className="w-50 pe-3" style={{ position: "relative" }}>
+                        <select name="quiz-type" id="wd-quiz-type" className="form-control mb-2"
+                        value={quizType} onChange={(e) => setQuizType(e.target.value)}>
+                            <option value="" disabled>Select Quiz Type</option>
+                            <option value="Graded Quiz">Graded Quiz</option>
+                            <option value="Ungraded Quiz">Ungraded Quiz</option>
+                        </select>
+                        <RiArrowDropDownFill className="fs-1" style={{position:"absolute", top:"1%", right:"3%", pointerEvents:"none"}}/>
+                    </div>
                 </div>
-                <div className="w-50 border p-3">
-                    <div>
-                        <label htmlFor="wd-assign-to" className="mb-2"><strong>Assign to</strong></label>
-                        <input type="text" id="wd-assign-to" value={"Everyone"} className="form-control mb-2"/>
+                <br />
+
+                {/* Time Limit */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-time-limit" className="float-end" style={{marginTop:"5px"}}>Time Limit</label>
                     </div>
-
-                    <br />
-
-                    <div>
-                        <label htmlFor="wd-due-date" className="mb-2"><strong>Due</strong></label>
-                        <input type="datetime-local" id="wd-due-date" name="due-date" value={dueDate} className="form-control mb-2"
-                        onChange={(e) => setDueDate(e.target.value)}/>
+                    <div className="w-50 pe-3">
+                        <input id="wd-time-limit" value={timeLimit} className="form-control mb-2"
+                        onChange={(e) => setTimeLimit(e.target.value)}/>
                     </div>
-
-                    <br />
-
-                    <div className="row">
-                        <div className="col-md-6 mb-2">
-                            <label htmlFor="wd-available-from" className="mb-2"><strong>Available From</strong></label>
-                            <input type="datetime-local" id="wd-available-from" name="available-from" value={availableDate} className="form-control mb-2"
-                            onChange={(e) => setAvailableDate(e.target.value)}/>
-                        </div>
-
-                        <div className="col-md-6 mb-2">
-                            <label htmlFor="wd-due-date" className="mb-2"><strong>Until</strong></label>
-                            <input type="datetime-local" id="wd-available-until" name="available-until" value={dueDate} className="form-control mb-2"
-                            onChange={(e) => setDueDate(e.target.value)}/>
-                        </div>
-                    </div>
-                    
                 </div>
-            </div>
-            <br />
+                <br />
+
+                {/* Assignment Group */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-assignment-group" className="float-end" style={{marginTop:"5px"}}>Assignment Group</label>
+                    </div>
+                    <div className="w-50 pe-3" style={{ position: "relative" }}>
+                        <select name="assignment-group" id="wd-assignment-group" className="form-control mb-2"
+                        value={assignmentGroup} onChange={(e) => setAssignmentGroup(e.target.value)}>
+                            <option value="" disabled>Select Assignment Group</option>
+                            <option value="Quizzes">Quiz</option>
+                            <option value="Exams">Exam</option>
+                            <option value="Assignments">Assignment</option>
+                            <option value="Projects">Project</option>
+                        </select>
+                        <RiArrowDropDownFill className="fs-1" style={{position:"absolute", top:"1%", right:"3%", pointerEvents:"none"}}/>
+                    </div>
+                </div>
+                <br />
+
+
+                {/* Shuffle For Each Student */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-shuffle-each-student" className="float-end">Shuffle For Each Student</label>
+                    </div>
+                    <div className="w-50 pe-3">
+                        <input type="checkbox" id="wd-shuffle-each-student" checked={shuffleForEachStudent} className="form-check-input mb-2"
+                        onChange={(e) => setShuffleForEachStudent(e.target.checked)} style={{border: "1px solid black"}}/>
+                    </div>
+                </div>
+                <br />
+
+                {/* Multiple Attempts */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-allow-multiple-attempts" className="float-end">Multiple Attempts</label>
+                    </div>
+                    <div className="w-50 pe-3">
+                        <input type="checkbox" id="wd-allow-multiple-attempts" checked={allowMultipleAttempts} className="form-check-input mb-2"
+                        onChange={(e) => setAllowMultipleAttempts(e.target.checked)} style={{border: "1px solid black"}}/>
+                    </div>
+                </div>
+                <br />
+
+                {/* Published */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-is-published" className="float-end">Published</label>
+                    </div>
+                    <div className="w-50 pe-3">
+                        <input type="checkbox" id="wd-is-published" checked={isPublished} className="form-check-input mb-2"
+                        onChange={(e) => setIsPublished(e.target.checked)} style={{border: "1px solid black"}}/>
+                    </div>
+                </div>
+                <br />
+
+                {/* View Responses */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-view-responses" className="float-end" style={{marginTop:"5px"}}>View Responses</label>
+                    </div>
+                    <div className="w-50 pe-3" style={{ position: "relative" }}>
+                        <select name="view-responses" id="wd-view-responses" className="form-control mb-2"
+                        value={viewResponse} onChange={(e) => setViewResponse(e.target.value)}>
+                            <option value="" disabled>Select Response View</option>
+                            <option value="Always">Always</option>
+                            <option value="Never">Never</option>
+                            <option value="Once">Once</option>
+                        </select>
+                        <RiArrowDropDownFill className="fs-1" style={{position:"absolute", top:"1%", right:"3%", pointerEvents:"none"}}/>
+                    </div>
+                </div>
+                <br />
+
+                {/* Show Correct Answers */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-show-correct-answers" className="float-end" style={{marginTop:"5px"}}>Correct Answers</label>
+                    </div>
+                    <div className="w-50 pe-3" style={{ position: "relative" }}>
+                        <select name="show-correct-answers" id="wd-show-correct-answers" className="form-control mb-2"
+                        value={showCorrectAnswers} onChange={(e) => setShowCorrectAnswers(e.target.value)}>
+                            <option value="" disabled>Select Correct Answers Visibility</option>
+                            <option value="Immediately">Immediately</option>
+                            <option value="After all attempts are graded">After all attempts are graded</option>
+                            <option value="After due date">After due date</option>
+                        </select>
+                        <RiArrowDropDownFill className="fs-1" style={{position:"absolute", top:"1%", right:"3%", pointerEvents:"none"}}/>
+                    </div>
+                </div>
+                <br />
+                
+                {/* Access Code */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-access-code" className="float-end" style={{marginTop:"5px"}}>Access Code</label>
+                    </div>
+                    <div className="w-50 pe-3">
+                        <input id="wd-access-code" type="password" value={accessCode} className="form-control mb-2"
+                        onChange={(e) => setAccessCode(e.target.value)}/>
+                    </div>
+                </div>
+                <br />
+
+                {/* Single Question At A Time */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-single-question" className="float-end">Single Question At A Time</label>
+                    </div>
+                    <div className="w-50 pe-3">
+                        <input type="checkbox" id="wd-single-question" checked={singleQuestionAtATime} className="form-check-input mb-2"
+                        onChange={(e) => setSingleQuestionAtATime(e.target.checked)} style={{border: "1px solid black"}}/>
+                    </div>
+                </div>
+                <br />
+
+                {/* Camera Required */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-camera-required" className="float-end">Camera Required</label>
+                    </div>
+                    <div className="w-50 pe-3">
+                        <input type="checkbox" id="wd-camera-required" checked={cameraRequired} className="form-check-input mb-2"
+                        onChange={(e) => setCameraRequired(e.target.checked)} style={{border: "1px solid black"}}/>
+                    </div>
+                </div>
+                <br />
+
+                {/* Lock Question After Answering */}
+                <div className="d-flex">
+                    <div className="w-50 pe-5">
+                        <label htmlFor="wd-lock-question" className="float-end">Lock Question on Answering</label>
+                    </div>
+                    <div className="w-50 pe-3">
+                        <input type="checkbox" id="wd-lock-question" checked={lockQuestionsAfterAnswering} className="form-check-input mb-2"
+                        onChange={(e) => setLockQuestionsAfterAnswering(e.target.checked)} style={{border: "1px solid black"}}/>
+                    </div>
+                </div>
+                <br />
             
             </div>
 
@@ -169,7 +273,7 @@ export default function QuizEditor() {
                             title: quizName,
                             points: points,
                             dueDate: dueDate,
-                            availableDate: availableDate,
+                            availabilityDate: availabilityDate,
                             })
                     navigate(`/Kanbas/Courses/${cid}/Quizzes`);
                 }}

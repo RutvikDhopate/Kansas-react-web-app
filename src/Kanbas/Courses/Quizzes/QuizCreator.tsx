@@ -2,7 +2,7 @@ import { RiArrowDropDownFill } from "react-icons/ri";
 
 export default function QuizCreator(
     {dialogTitle, quizName, setQuizName, addQuiz, points, setPoints, description, setDescription, dueDate, 
-        setDueDate, availableDate, setAvailableDate, quizType, setQuizType, timeLimit, setTimeLimit,
+        setDueDate, availabilityDate, setAvailabilityDate, quizType, setQuizType, timeLimit, setTimeLimit,
         assignmentGroup, setAssignmentGroup, shuffleForEachStudent, setShuffleForEachStudent,
         allowMultipleAttempts, setAllowMultipleAttempts, isPublished, setIsPublished,
         viewResponse, setViewResponse, showCorrectAnswers, setShowCorrectAnswers, 
@@ -12,7 +12,7 @@ export default function QuizCreator(
         points: string; setPoints: (name: string) => void;
         description: string, setDescription: (name: string) => void;
         dueDate: string; setDueDate: (name: string) => void;
-        availableDate: string; setAvailableDate: (name: string) => void;
+        availabilityDate: string; setAvailabilityDate: (name: string) => void;
         quizType: string; setQuizType: (name: string) => void;
         timeLimit: string, setTimeLimit: (name: string) => void;
         assignmentGroup: string, setAssignmentGroup: (name: string) => void;
@@ -245,8 +245,8 @@ export default function QuizCreator(
                                     <div className="row">
                                         <div className="col-md-6 mb-2">
                                             <label htmlFor="wd-available-from" className="mb-2"><strong>Available From</strong></label>
-                                            <input type="datetime-local" id="wd-available-from" name="available-from" value={availableDate} className="form-control mb-2"
-                                            onChange={(e) => setAvailableDate(e.target.value)}/>
+                                            <input type="datetime-local" id="wd-available-from" name="available-from" value={availabilityDate} className="form-control mb-2"
+                                            onChange={(e) => setAvailabilityDate(e.target.value)}/>
                                         </div>
 
                                         <div className="col-md-6 mb-2">

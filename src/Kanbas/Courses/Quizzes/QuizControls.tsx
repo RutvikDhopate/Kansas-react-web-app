@@ -4,7 +4,7 @@ import QuizCreator from "./QuizCreator";
 import { useState } from "react";
 export default function QuizControls(
     {quizName, setQuizName, addQuiz, points, setPoints, description, setDescription, dueDate, 
-        setDueDate, availableDate, setAvailableDate, quizType, setQuizType, timeLimit, setTimeLimit,
+        setDueDate, availabilityDate, setAvailabilityDate, quizType, setQuizType, timeLimit, setTimeLimit,
         assignmentGroup, setAssignmentGroup, shuffleForEachStudent, setShuffleForEachStudent,
         allowMultipleAttempts, setAllowMultipleAttempts, isPublished, setIsPublished,
         viewResponse, setViewResponse, showCorrectAnswers, setShowCorrectAnswers, 
@@ -14,7 +14,7 @@ export default function QuizControls(
         points: string; setPoints: (name: string) => void;
         description: string, setDescription: (name: string) => void;
         dueDate: string; setDueDate: (name: string) => void;
-        availableDate: string; setAvailableDate: (name: string) => void;
+        availabilityDate: string; setAvailabilityDate: (name: string) => void;
         quizType: string; setQuizType: (name: string) => void;
         timeLimit: string, setTimeLimit: (name: string) => void;
         assignmentGroup: string, setAssignmentGroup: (name: string) => void;
@@ -56,8 +56,8 @@ export default function QuizControls(
                 setDescription={setDescription}
                 dueDate={dueDate}
                 setDueDate={setDueDate}
-                availableDate={availableDate}
-                setAvailableDate={setAvailableDate}
+                availabilityDate={availabilityDate}
+                setAvailabilityDate={setAvailabilityDate}
                 quizType={quizType}
                 setQuizType={setQuizType}
                 timeLimit={timeLimit}
