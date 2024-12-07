@@ -248,12 +248,16 @@ export default function QuizAttempt() {
                   </div>
                 ))}
 
-              {/* Display Correct Answer for Multiple Choice after submission
               {latestAttempt && question.questionType === "Multiple Choice" && (
                 <div>
-                  <strong>Correct Answer:</strong> {question.choices?. }
+                  <strong>Correct Answer:</strong>{" "}
+                  {question.choices
+                    ?.filter((choice: any) => choice.isCorrect)
+                    .map((choice: any) => (
+                      <>{choice.text},</>
+                    ))}
                 </div>
-              )} */}
+              )}
 
               {/* True/False */}
               {question.questionType === "True/False" && (
@@ -301,6 +305,17 @@ export default function QuizAttempt() {
                 </div>
               )}
 
+              {latestAttempt && question.questionType === "True/False" && (
+                <div>
+                  <strong>Correct Answer:</strong>{" "}
+                  {question.choices
+                    ?.filter((choice: any) => choice.isCorrect)
+                    .map((choice: any) => (
+                      <>{choice.text},</>
+                    ))}
+                </div>
+              )}
+
               {/* Fill in the Blanks */}
               {question.questionType === "Fill in the Blanks" && (
                 <input
@@ -322,6 +337,16 @@ export default function QuizAttempt() {
                   disabled={!!latestAttempt}
                 />
               )}
+
+              {latestAttempt &&
+                question.questionType === "Fill in the Blanks" && (
+                  <div>
+                    <strong>Correct Answer:</strong>{" "}
+                    {question.blanks.map((a: any) => (
+                      <>{a.answer},</>
+                    ))}
+                  </div>
+                )}
 
               {/* Multiple Select */}
               {question.questionType === "Multiple Select" &&
@@ -379,9 +404,21 @@ export default function QuizAttempt() {
                     <label>{choice.text}</label>
                   </div>
                 ))}
+
+              {latestAttempt && question.questionType === "Multiple Select" && (
+                <div>
+                  <strong>Correct Answer:</strong>{" "}
+                  {question.choices
+                    ?.filter((choice: any) => choice.isCorrect)
+                    .map((choice: any) => (
+                      <>{choice.text}, </>
+                    ))}
+                </div>
+              )}
+
+              <hr />
             </div>
           ))}
-          <hr />
           <button onClick={handleSubmitQuiz} disabled={!!latestAttempt}>
             Submit Quiz
           </button>
