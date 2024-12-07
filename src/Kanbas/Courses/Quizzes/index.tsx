@@ -54,7 +54,7 @@ export default function Quizzes() {
     const [availabilityDate, setAvailabilityDate] = useState("");
     const [quizType, setQuizType] = useState("Graded Quiz");
     const [timeLimit, setTimeLimit] = useState("");
-    const [assignmentGroup, setAssignmentGroup] = useState("");
+    const [assignmentGroup, setAssignmentGroup] = useState("Quizzes");
     const [shuffleForEachStudent, setShuffleForEachStudent] = useState(false);
     const [allowMultipleAttempts, setAllowMultipleAttempts] = useState(false);
     const [isPublished, setIsPublished] = useState(false);

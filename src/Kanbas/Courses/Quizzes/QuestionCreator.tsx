@@ -12,12 +12,12 @@ export default function QuestionCreator(
         questionType: "Multiple Choice",
         questionText: "",
         points: "10",
-        options: [{ text: "", isCorrect: false }],
+        choices: [{ text: "", isCorrect: false }],
         blanks: [{ answer: "" }]
     });
 
     const addOption = () => {
-        setNewQuestion({...newQuestion, options: [...newQuestion.options, {text: "", isCorrect: false}]});
+        setNewQuestion({...newQuestion, choices: [...newQuestion.choices, {text: "", isCorrect: false}]});
     };
 
     const handleSubmit = () => {
@@ -66,28 +66,28 @@ export default function QuestionCreator(
                             <div>
                                 <label className="form-label">Options</label>
                                 {
-                                    newQuestion.options.map((option: any, index: any) => (
+                                    newQuestion.choices.map((option: any, index: any) => (
                                         <div key={index} className="d-flex align-items-center mb-2">
                                             <input type="text" className="form-control me-2 w-50" placeholder={`Option ${index + 1}`}
                                                 onChange={(e) => {
-                                                    const updatedOptions = [...newQuestion.options];
+                                                    const updatedOptions = [...newQuestion.choices];
                                                     updatedOptions[index].text = e.target.value;
-                                                    setNewQuestion({ ...newQuestion, options: updatedOptions });
+                                                    setNewQuestion({ ...newQuestion, choices: updatedOptions });
                                                 }}/>
 
                                             <input type="checkbox" checked={option.isCorrect} className="form-check-input me-2"
                                                 id={`correct-answer-${index}`}
                                                 style={{border: "1px solid black"}}
                                                 onChange={(e) => {
-                                                    const updatedOptions = [...newQuestion.options];
+                                                    const updatedOptions = [...newQuestion.choices];
                                                     updatedOptions[index].isCorrect = e.target.checked;
-                                                    setNewQuestion({ ...newQuestion, options: updatedOptions });
+                                                    setNewQuestion({ ...newQuestion, choices: updatedOptions });
                                                 }}/>
                                             <label htmlFor={`correct-answer-${index}`} className="me-3">Correct Answer</label>
                                             <FaTrash type="button" onClick={() => {
-                                                const updatedOptions = [...newQuestion.options];
+                                                const updatedOptions = [...newQuestion.choices];
                                                 updatedOptions.splice(index, 1);
-                                                setNewQuestion({ ...newQuestion, options: updatedOptions });
+                                                setNewQuestion({ ...newQuestion, choices: updatedOptions });
                                             }}/>
                                         </div>
                                     ))
@@ -113,10 +113,10 @@ export default function QuestionCreator(
                                     <label htmlFor="true-false-checkobx" className="mb-2 me-2">True</label>
                                     <input type="checkbox" className="form-check-input" style={{border: "1px solid black"}}
                                         id="true-false-checkbox"
-                                        checked={newQuestion.options[0]?.text === "True"}
+                                        checked={newQuestion.choices[0]?.text === "True"}
                                         onChange={(e) => {
                                             const isTrue = e.target.checked;
-                                            setNewQuestion({...newQuestion, options: [
+                                            setNewQuestion({...newQuestion, choices: [
                                                 { text: "True", isCorrect: isTrue },
                                                 { text: "False", isCorrect: !isTrue }
                                             ]})

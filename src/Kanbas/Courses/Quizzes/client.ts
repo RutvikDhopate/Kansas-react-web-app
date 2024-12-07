@@ -8,6 +8,7 @@ const QUIZZES_API = `${REMOTE_SERVER}/api/quizzes`;
 
 export const getQuizById = async (quizId: string) => {
     const { data } = await axiosWithCredentials.get(`${QUIZZES_API}/${quizId}`);
+    console.log(data);
     return data;
 };
 
