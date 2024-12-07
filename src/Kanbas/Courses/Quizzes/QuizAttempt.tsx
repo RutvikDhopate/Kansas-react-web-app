@@ -248,12 +248,12 @@ export default function QuizAttempt() {
                   </div>
                 ))}
 
-              {/* Display Correct Answer for Multiple Choice after submission */}
+              {/* Display Correct Answer for Multiple Choice after submission
               {latestAttempt && question.questionType === "Multiple Choice" && (
                 <div>
                   <strong>Correct Answer:</strong> {question.choices?. }
                 </div>
-              )}
+              )} */}
 
               {/* True/False */}
               {question.questionType === "True/False" && (
