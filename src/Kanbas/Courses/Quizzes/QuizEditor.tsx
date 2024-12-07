@@ -180,6 +180,11 @@ export default function QuizEditor() {
             <label htmlFor={`question-${index}`} className="form-label">
               Question {index + 1}
             </label>
+            <FaTrash className="float-end me-2" type="button" onClick={() => {
+                const updatedQuestions = questions.filter((_, i) => i !==index );
+                setQuestions(updatedQuestions)
+                setPoints(calculateTotalPoints());
+            }}/>
             <input
               id={`question-${index}`}
               className="form-control mb-3"
