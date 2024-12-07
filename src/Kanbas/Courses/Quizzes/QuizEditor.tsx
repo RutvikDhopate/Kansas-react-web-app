@@ -266,18 +266,47 @@ export default function QuizEditor() {
                                 )
                             ) : question.questionType === "True/False" ? (
                                 <div>
-                                    <label htmlFor={`true-false-checkbox-${index}`} className="mb-2 me-2">True</label>
-                                    <input type="checkbox" className="form-check-input" style={{ border: "1px solid black" }}
-                                        id={`true-false-checkbox-${index}`} checked={question.choices[0]?.text === "True"}
+                                    {/* True Option */}
+                                    <div className="d-flex align-items-center mb-2">
+                                        <input
+                                        type="checkbox"
+                                        id={`true-option-${index}`}
+                                        className="form-check-input me-2"
+                                        checked={question.choices[0]?.isCorrect}
                                         onChange={(e) => {
-                                            const isTrue = e.target.checked;
                                             const updatedQuestions = [...questions];
                                             updatedQuestions[index].choices = [
-                                                { text: "True", isCorrect: isTrue },
-                                                { text: "False", isCorrect: !isTrue },
+                                            { text: "True", isCorrect: e.target.checked },
+                                            { text: "False", isCorrect: !e.target.checked },
                                             ];
                                             setQuestions(updatedQuestions);
-                                        }}/>
+                                        }}
+                                        />
+                                        <label htmlFor={`true-option-${index}`} className="form-label me-3">
+                                        True
+                                        </label>
+                                    </div>
+
+                                    {/* False Option */}
+                                    <div className="d-flex align-items-center">
+                                        <input
+                                        type="checkbox"
+                                        id={`false-option-${index}`}
+                                        className="form-check-input me-2"
+                                        checked={question.choices[1]?.isCorrect}
+                                        onChange={(e) => {
+                                            const updatedQuestions = [...questions];
+                                            updatedQuestions[index].choices = [
+                                            { text: "True", isCorrect: !e.target.checked },
+                                            { text: "False", isCorrect: e.target.checked },
+                                            ];
+                                            setQuestions(updatedQuestions);
+                                        }}
+                                        />
+                                        <label htmlFor={`false-option-${index}`} className="form-label me-3">
+                                        False
+                                        </label>
+                                    </div>
                                 </div>
                             ) : null}
                         </div>

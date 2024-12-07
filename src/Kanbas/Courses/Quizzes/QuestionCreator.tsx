@@ -106,24 +106,52 @@ export default function QuestionCreator(
                                         setNewQuestion({ ...newQuestion, blanks: updatedBlanks });
                                     }}/>
                             </div>
-                        ): (
+                        ): newQuestion.questionType === "True/False" ? (
                             <div className="mb-3">
-                                <label className="form-label">Answer</label>
-                                <div>
-                                    <label htmlFor="true-false-checkobx" className="mb-2 me-2">True</label>
-                                    <input type="checkbox" className="form-check-input" style={{border: "1px solid black"}}
-                                        id="true-false-checkbox"
-                                        checked={newQuestion.choices[0]?.text === "True"}
-                                        onChange={(e) => {
-                                            const isTrue = e.target.checked;
-                                            setNewQuestion({...newQuestion, choices: [
-                                                { text: "True", isCorrect: isTrue },
-                                                { text: "False", isCorrect: !isTrue }
-                                            ]})
-                                        }}/>
+                                    <label className="form-label">Answer</label>
+                                    <div>
+                                        {/* True Option */}
+                                        <div className="d-flex align-items-center mb-2">
+                                        <input
+                                            type="checkbox"
+                                            id="true-option"
+                                            className="form-check-input me-2"
+                                            checked={newQuestion.choices[0]?.isCorrect}
+                                            onChange={(e) => {
+                                            const updatedChoices = [
+                                                { text: "True", isCorrect: e.target.checked },
+                                                { text: "False", isCorrect: !e.target.checked },
+                                            ];
+                                            setNewQuestion({ ...newQuestion, choices: updatedChoices });
+                                            }}
+                                        />
+                                        <label htmlFor="true-option" className="form-label me-3">
+                                            True
+                                        </label>
+                                        </div>
+
+                                        {/* False Option */}
+                                        <div className="d-flex align-items-center">
+                                        <input
+                                            type="checkbox"
+                                            id="false-option"
+                                            className="form-check-input me-2"
+                                            checked={newQuestion.choices[1]?.isCorrect}
+                                            onChange={(e) => {
+                                            const updatedChoices = [
+                                                { text: "True", isCorrect: !e.target.checked },
+                                                { text: "False", isCorrect: e.target.checked },
+                                            ];
+                                            setNewQuestion({ ...newQuestion, choices: updatedChoices });
+                                            }}
+                                        />
+                                        <label htmlFor="false-option" className="form-label me-3">
+                                            False
+                                        </label>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                        ): null}
                     </div>
 
                     <div className="modal-footer">
