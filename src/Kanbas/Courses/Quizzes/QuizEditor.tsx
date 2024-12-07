@@ -4,6 +4,8 @@ import { updateQuiz } from "./reducer";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import * as quizzesClient from "./client";
+import QuestionCreator from "./QuestionCreator";
+import { FaTrash } from "react-icons/fa";
 export default function QuizEditor() {
 
     const { cid, qid } = useParams();
@@ -27,13 +29,16 @@ export default function QuizEditor() {
         setSingleQuestionAtATime(quiz.singleQuestionAtATime);
         setCameraRequired(quiz.cameraRequired);
         setLockQuestionsAfterAnswering(quiz.lockQuestionsAfterAnswering);
+        setQuestions(quiz.questions);
         setLoading(false);
     };
 
     useEffect(() => {
-        if (qid) {
+        const loadQuiz = async () => {if (qid) {
             fetchQuizDetails(qid)
         }
+    };
+    loadQuiz();
     }, [qid]);
 
     const navigate = useNavigate();
@@ -56,8 +61,10 @@ export default function QuizEditor() {
     const [singleQuestionAtATime, setSingleQuestionAtATime] = useState(false);
     const [cameraRequired, setCameraRequired] = useState(false);
     const [lockQuestionsAfterAnswering, setLockQuestionsAfterAnswering] = useState(false);
+    const [questions, setQuestions] = useState<any[]>([]);
     const [loading, setLoading] = useState(true)
     
+    const [createQuestion, setCreateQuestion] = useState(false);
 
     const saveQuiz = async (quiz: any) => {
         await quizzesClient.updateQuiz(quiz);
@@ -66,6 +73,11 @@ export default function QuizEditor() {
     if (loading){
         return <div>Quiz not found</div>
     }
+
+    const calculateTotalPoints = () => {
+        return questions.reduce((sum, question) => sum + (Number(question.points) || 0), 0);
+    };
+
     return (
         
         <div id="wd-quizzes-editor" style={{marginLeft:"2%", marginRight:"2%"}}>
@@ -79,6 +91,148 @@ export default function QuizEditor() {
             
             <br />
             <br />
+            <hr />
+
+            {/*Questions*/}
+            <div>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Questions</h3>
+                    <button className="btn btn-primary" onClick={() => setCreateQuestion(true)}>
+                        Add Question
+                    </button>
+                </div>
+
+                {/* Render AddQuestion Component */}
+                {createQuestion && (
+                    <QuestionCreator
+                        dialogTitle="Add New Question"
+                        onAdd={(newQuestion) => {
+                            const updatedQuestions = [...questions, newQuestion];
+                            setQuestions(updatedQuestions);
+                        }}
+                        onClose={() => setCreateQuestion(false)}/>
+                )}
+
+                {/* Render Existing Questions */}
+                {questions.map((question, index) => (
+                    <div key={index} className="mb-3">
+                        {/* Question Points */}
+                        <label htmlFor={`question-${index}`} className="form-label">
+                            Question {index + 1} Points
+                        </label>
+                        <input id={`question-${index}`} className="form-control mb-3 w-25" value={question.points}                            
+                            onChange={(e) => {
+                                const updatedQuestions = [...questions];
+                                updatedQuestions[index].points = e.target.value;
+                                setQuestions(updatedQuestions);
+                            }}/>
+
+                        {/* Question Type */}
+                        <label htmlFor={`questionType-${index}`} className="form-label">
+                            Question Type
+                        </label>
+                        <select id={`questionType-${index}`} className="form-select form-select-sm w-25"
+                            value={question.questionType} 
+                            onChange={(e) => {
+                                const updatedQuestions = [...questions];
+                                updatedQuestions[index].questionType = e.target.value;
+                                setQuestions(updatedQuestions);
+                            }}>
+                                <option value="Multiple Choice">Multiple Choice</option>
+                                <option value="Multiple Select">Multiple Select</option>
+                                <option value="True/False">True/False</option>
+                                <option value="Fill in the Blanks">Fill in the Blanks</option>
+                        </select>
+                        <br />
+
+                        {/* Question Text */}
+                        <label htmlFor={`question-${index}`} className="form-label">
+                            Question {index + 1}
+                        </label>
+                        <input id={`question-${index}`} className="form-control mb-3" value={question.questionText}                            
+                            onChange={(e) => {
+                                const updatedQuestions = [...questions];
+                                updatedQuestions[index].questionText = e.target.value;
+                                setQuestions(updatedQuestions);
+                            }}/>
+
+                        {/* Display Answers */}
+                        <div className="mt-2">
+                            <label className="form-label">Answers</label>
+                            {question.questionType === "Multiple Choice" || question.questionType === "Multiple Select" ? (
+                                <ul>
+                                    {question.choices.map((choice: any, choiceIndex: any) => (
+                                        <li key={choiceIndex}>
+                                            <input type="text" className="form-control d-inline-block me-2"
+                                                value={choice.text} style={{ width: "80%" }}
+                                                onChange={(e) => {
+                                                    const updatedQuestions = [...questions];
+                                                    updatedQuestions[index].choices[choiceIndex].text = e.target.value;
+                                                    setQuestions(updatedQuestions);
+                                                }}/>
+                                            <input type="checkbox" className="form-check-input mt-2" checked={choice.isCorrect}
+                                                style={{border: "1px solid black"}}
+                                                onChange={(e) => {
+                                                    const updatedQuestions = [...questions];
+                                                    updatedQuestions[index].choices[choiceIndex].isCorrect = e.target.checked;
+                                                    setQuestions(updatedQuestions);
+                                                }}/>
+                                            <span className="ms-2">Correct</span>
+                                            <FaTrash className="mt-2 float-end" onClick={() => {
+                                                const updatedQuestions = [...questions];
+                                                updatedQuestions[index].choices.splice(choiceIndex, 1);
+                                                setQuestions(updatedQuestions);
+                                            }}/>
+                                        </li>
+                                    ))}
+                                    <li>
+                                        <button className="btn btn-primary btn-sm mt-2 mb-2" onClick={() => {
+                                            const updatedQuestions = [...questions];
+                                            updatedQuestions[index].choices.push({ text: "", isCorrect: false});
+                                            setQuestions(updatedQuestions);
+                                        }}>
+                                            Add Option
+                                        </button>
+                                    </li>
+                                </ul>
+                            ) : question.questionType === "Fill in the Blanks" ? (
+                                <input type="text" className="form-control" value={question.blanks[0]?.answer || ""}
+                                    onChange={(e) => {
+                                        const updatedQuestions = [...questions];
+                                        if (updatedQuestions[index].blanks) {
+                                            updatedQuestions[index].blanks[0].answer = e.target.value;
+                                        }
+                                        setQuestions(updatedQuestions);
+                                    }}/>                                
+                            ) : (
+                                <div>
+                                    <label htmlFor={`true-false-checkbox-${index}`} className="mb-2 me-2">True</label>
+                                    <input type="checkbox" className="form-check-input" style={{border: "1px solid black"}}
+                                        id={`true-false-checkbox-${index}`}
+                                        checked={question.options[0]?.text === "True"}
+                                        onChange={(e) => {
+                                            const isTrue = e.target.checked;
+                                            const updatedQuestions = [...questions];
+                                            updatedQuestions[index].options = [
+                                                { text: "True", isCorrect: isTrue },
+                                                { text: "False", isCorrect: !isTrue },
+                                            ];
+                                            setQuestions(updatedQuestions);
+                                        }}/>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ))}
+
+            </div>
+
+
+
+
+            <br />
+            <br />
+            <hr />
 
             <div >
                 {/* Points */}
@@ -87,7 +241,7 @@ export default function QuizEditor() {
                         <label htmlFor="wd-points" className="float-end" style={{marginTop:"5px"}}>Points</label>
                     </div>
                     <div className="w-50 pe-3">
-                        <input id="wd-points" value={points} className="form-control mb-2"
+                        <input id="wd-points" value={calculateTotalPoints()} className="form-control mb-2" readOnly
                         onChange={(e) => setPoints(e.target.value)}/>
                     </div>
                 </div>
@@ -271,9 +425,21 @@ export default function QuizEditor() {
                 onClick={() => {
                     saveQuiz({_id: qid,
                             title: quizName,
-                            points: points,
+                            points: calculateTotalPoints(),
                             dueDate: dueDate,
                             availabilityDate: availabilityDate,
+                            questions: questions,
+                            quizType: quizType,
+                            assignmentGroup: assignmentGroup,
+                            shuffleForEachStudent: shuffleForEachStudent,
+                            allowMultipleAttempts: allowMultipleAttempts,
+                            isPublished: isPublished,
+                            viewResponse: viewResponse,
+                            showCorrectAnswers: showCorrectAnswers,
+                            accessCode: accessCode,
+                            singleQuestionAtATime: singleQuestionAtATime,
+                            cameraRequired: cameraRequired,
+                            lockQuestionsAfterAnswering: lockQuestionsAfterAnswering
                             })
                     navigate(`/Kanbas/Courses/${cid}/Quizzes`);
                 }}
