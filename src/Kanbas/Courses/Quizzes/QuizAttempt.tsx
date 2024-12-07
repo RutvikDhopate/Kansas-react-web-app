@@ -200,61 +200,97 @@ export default function QuizAttempt() {
   }, []);
 
   return (
-    <>
-      <div>Quiz Title - {currentQuiz.title}</div>
-      <div>Quiz Description - {currentQuiz.description}</div>
-      <div>Total Points - {currentQuiz.points}</div>
-      <div>Due Date - {currentQuiz.dueDate}</div>
-      <div>Available Date - {currentQuiz.availabilityDate}</div>
-      <div>Time Limit - {currentQuiz.timeLimit} minutes</div>
-      <hr />
-
-      <div>
-        Points Scored - {latestAttempt ? latestAttempt.score : "Not Submitted"}
+    <div className="container mt-4">
+      <div className="card p-4">
+        <h3 className="card-title">Quiz Details</h3>
+        <div className="mb-3">
+          <strong>Title:</strong> {currentQuiz.title}
+        </div>
+        <div className="mb-3">
+          <strong>Description:</strong> {currentQuiz.description}
+        </div>
+        <div className="mb-3">
+          <strong>Total Points:</strong> {currentQuiz.points}
+        </div>
+        <div className="mb-3">
+          <strong>Due Date:</strong> {currentQuiz.dueDate}
+        </div>
+        <div className="mb-3">
+          <strong>Available Date:</strong> {currentQuiz.availabilityDate}
+        </div>
+        <div className="mb-3">
+          <strong>Time Limit:</strong> {currentQuiz.timeLimit} minutes
+        </div>
       </div>
-      <div>
-        Quiz Submitted on -{" "}
-        {latestAttempt ? latestAttempt.completedAt : "Not Submitted"}
-      </div>
-      <hr />
 
-      {/* If quiz has access code, show input field for access code */}
+      <div className="card mt-4 p-4">
+        <h4 className="card-title">Quiz Status</h4>
+        <div className="mb-3">
+          <strong>Points Scored:</strong>{" "}
+          {latestAttempt ? latestAttempt.score : "Not Submitted"}
+        </div>
+        <div className="mb-3">
+          <strong>Submitted On:</strong>{" "}
+          {latestAttempt ? latestAttempt.completedAt : "Not Submitted"}
+        </div>
+      </div>
+
+      {/* Access Code Section */}
       {currentQuiz.accessCode && !latestAttempt && (
-        <div>
-          <label>Enter Access Code: </label>
-          <input
-            type="text"
-            value={enteredAccessCode}
-            onChange={(e) => setEnteredAccessCode(e.target.value)}
-            placeholder="Enter access code"
-          />
-          <button onClick={handleAccessCodeSubmit}>Submit</button>
-          {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
+        <div className="card mt-4 p-4">
+          <h4 className="card-title">Enter Access Code</h4>
+          <div className="form-group">
+            <input
+              type="text"
+              className="form-control mb-3"
+              value={enteredAccessCode}
+              onChange={(e) => setEnteredAccessCode(e.target.value)}
+              placeholder="Enter access code"
+            />
+            <button
+              className="btn btn-primary"
+              onClick={handleAccessCodeSubmit}
+            >
+              Submit
+            </button>
+            {errorMessage && (
+              <div className="text-danger mt-2">{errorMessage}</div>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Only show the Start Quiz button if access code is correct or if the quiz has no access code */}
+      {/* Start Quiz Button */}
       {!currentQuiz.accessCode || clickedAccessSubmit ? (
-        <button onClick={startQuiz} disabled={!!latestAttempt}>
-          Start Quiz
-        </button>
+        <div className="text-center mt-4">
+          <button
+            className="btn btn-success"
+            onClick={startQuiz}
+            disabled={!!latestAttempt}
+          >
+            Start Quiz
+          </button>
+        </div>
       ) : null}
-      <hr />
 
+      {/* Questions Section */}
       {(latestAttempt || startAttempt) && currentQuiz.questions && (
-        <div>
-          <h2>Questions</h2>
+        <div className="card mt-4 p-4">
+          <h4 className="card-title">Questions</h4>
           {currentQuiz.questions.map((question: any, index: number) => (
-            <div key={index}>
+            <div key={index} className="mb-4">
               <p>
-                {index + 1}. {question.questionText}
+                <strong>
+                  {index + 1}. {question.questionText}
+                </strong>
               </p>
 
               {/* Multiple Choice */}
               {question.questionType === "Multiple Choice" &&
                 question.choices.map((choice: any, idx: number) => (
-                  <div key={idx}>
+                  <div key={idx} className="form-check">
                     <input
+                      className="form-check-input"
                       type="radio"
                       name={`question-${index}`}
                       value={choice.text}
@@ -277,17 +313,18 @@ export default function QuizAttempt() {
                       }}
                       disabled={!!latestAttempt}
                     />
-                    <label>{choice.text}</label>
+                    <label className="form-check-label">{choice.text}</label>
                   </div>
                 ))}
 
+              {/* Correct Answer for Multiple Choice */}
               {latestAttempt && question.questionType === "Multiple Choice" && (
-                <div>
+                <div className="mt-2 text-success">
                   <strong>Correct Answer:</strong>{" "}
                   {question.choices
                     ?.filter((choice: any) => choice.isCorrect)
-                    .map((choice: any) => (
-                      <>{choice.text},</>
+                    .map((choice: any, idx: number) => (
+                      <span key={idx}>{choice.text}, </span>
                     ))}
                 </div>
               )}
@@ -295,51 +332,58 @@ export default function QuizAttempt() {
               {/* True/False */}
               {question.questionType === "True/False" && (
                 <div>
-                  <input
-                    type="radio"
-                    name={`question-${index}`}
-                    value="true"
-                    checked={
-                      currentAttempt.answers?.find(
-                        (ans: any) => ans.questionId === question._id
-                      )?.trueFalseAnswer === true
-                    }
-                    onChange={() => {
-                      if (!latestAttempt) {
-                        handleAnswerChange(question._id, {
-                          answerType: "True/False",
-                          trueFalseAnswer: true,
-                        });
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name={`question-${index}`}
+                      value="true"
+                      checked={
+                        currentAttempt.answers?.find(
+                          (ans: any) => ans.questionId === question._id
+                        )?.trueFalseAnswer === true
                       }
-                    }}
-                    disabled={!!latestAttempt}
-                  />
-                  <label>True</label>
-                  <input
-                    type="radio"
-                    name={`question-${index}`}
-                    value="false"
-                    checked={
-                      currentAttempt.answers?.find(
-                        (ans: any) => ans.questionId === question._id
-                      )?.trueFalseAnswer === false
-                    }
-                    onChange={() => {
-                      if (!latestAttempt) {
-                        handleAnswerChange(question._id, {
-                          answerType: "True/False",
-                          trueFalseAnswer: false,
-                        });
+                      onChange={() => {
+                        if (!latestAttempt) {
+                          handleAnswerChange(question._id, {
+                            answerType: "True/False",
+                            trueFalseAnswer: true,
+                          });
+                        }
+                      }}
+                      disabled={!!latestAttempt}
+                    />
+                    <label className="form-check-label">True</label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name={`question-${index}`}
+                      value="false"
+                      checked={
+                        currentAttempt.answers?.find(
+                          (ans: any) => ans.questionId === question._id
+                        )?.trueFalseAnswer === false
                       }
-                    }}
-                    disabled={!!latestAttempt}
-                  />
-                  <label>False</label>
+                      onChange={() => {
+                        if (!latestAttempt) {
+                          handleAnswerChange(question._id, {
+                            answerType: "True/False",
+                            trueFalseAnswer: false,
+                          });
+                        }
+                      }}
+                      disabled={!!latestAttempt}
+                    />
+                    <label className="form-check-label">False</label>
+                  </div>
                 </div>
               )}
 
+              {/* Correct Answer for True/False */}
               {latestAttempt && question.questionType === "True/False" && (
-                <div>
+                <div className="mt-2 text-success">
                   <strong>Correct Answer:</strong>{" "}
                   {question.choices
                     ?.filter((choice: any) => choice.isCorrect)
@@ -353,6 +397,7 @@ export default function QuizAttempt() {
               {question.questionType === "Fill in the Blanks" && (
                 <input
                   type="text"
+                  className="form-control"
                   placeholder="Enter your answer"
                   value={
                     currentAttempt.answers?.find(
@@ -371,9 +416,10 @@ export default function QuizAttempt() {
                 />
               )}
 
+              {/* Correct Answer for Fill in the Blanks */}
               {latestAttempt &&
                 question.questionType === "Fill in the Blanks" && (
-                  <div>
+                  <div className="mt-2 text-success">
                     <strong>Correct Answer:</strong>{" "}
                     {question.blanks.map((a: any) => (
                       <>{a.answer},</>
@@ -384,8 +430,9 @@ export default function QuizAttempt() {
               {/* Multiple Select */}
               {question.questionType === "Multiple Select" &&
                 question.choices.map((choice: any, idx: number) => (
-                  <div key={idx}>
+                  <div key={idx} className="form-check">
                     <input
+                      className="form-check-input"
                       type="checkbox"
                       name={`question-${index}`}
                       value={choice.text}
@@ -434,17 +481,18 @@ export default function QuizAttempt() {
                       }}
                       disabled={!!latestAttempt}
                     />
-                    <label>{choice.text}</label>
+                    <label className="form-check-label">{choice.text}</label>
                   </div>
                 ))}
 
+              {/* Correct Answer for Multiple Select */}
               {latestAttempt && question.questionType === "Multiple Select" && (
-                <div>
-                  <strong>Correct Answer:</strong>{" "}
+                <div className="mt-2 text-success">
+                  <strong>Correct Answer(s):</strong>{" "}
                   {question.choices
                     ?.filter((choice: any) => choice.isCorrect)
-                    .map((choice: any) => (
-                      <>{choice.text}, </>
+                    .map((choice: any, idx: number) => (
+                      <span key={idx}>{choice.text}, </span>
                     ))}
                 </div>
               )}
@@ -452,11 +500,17 @@ export default function QuizAttempt() {
               <hr />
             </div>
           ))}
-          <button onClick={handleSubmitQuiz} disabled={!!latestAttempt}>
-            Submit Quiz
-          </button>
+          <div className="text-center">
+            <button
+              className="btn btn-primary"
+              onClick={handleSubmitQuiz}
+              disabled={!!latestAttempt}
+            >
+              Submit Quiz
+            </button>
+          </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
