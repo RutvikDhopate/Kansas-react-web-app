@@ -7,31 +7,37 @@ import * as quizzesClient from "./client";
 import QuestionCreator from "./QuestionCreator";
 import { FaTrash } from "react-icons/fa";
 export default function QuizEditor() {
-  const { cid, qid } = useParams();
-  const fetchQuizDetails = async (quizId: string) => {
-    const quiz = await quizzesClient.getQuizById(quizId);
-    console.log(quiz);
-    setQuestions(quiz?.questions || []);
-    setQuizName(quiz.title);
-    setPoints(quiz.points);
-    setDescription(quiz.description);
-    setDueDate(quiz.dueDate);
-    setAvailabilityDate(quiz.availabilityDate);
-    setQuizType(quiz.quizType);
-    setTimeLimit(quiz.timeLimit);
-    setAssignmentGroup(quiz.assignmentGroup);
-    setShuffleForEachStudent(quiz.shuffleForEachStudent);
-    setAllowMultipleAttempts(quiz.allowMultipleAttempts);
-    setIsPublished(quiz.isPublished);
-    setViewResponse(quiz.viewResponse);
-    setShowCorrectAnswers(quiz.showCorrectAnswers);
-    setAccessCode(quiz.accessCode);
-    setSingleQuestionAtATime(quiz.singleQuestionAtATime);
-    setCameraRequired(quiz.cameraRequired);
-    setLockQuestionsAfterAnswering(quiz.lockQuestionsAfterAnswering);
-    setQuestions(quiz.questions);
-    setLoading(false);
-  };
+
+    const { cid, qid } = useParams();
+    const fetchQuizDetails = async (quizId: string) => {
+
+        const quiz = await quizzesClient.getQuizById(quizId);
+        console.log(quiz);
+        const processedQuestions = quiz?.questions.map((q: any) => ({
+            ...q,
+            choices: q.choices || [], 
+            blanks: q.blanks || [], 
+        })) || [];
+        setQuestions(processedQuestions);
+        setQuizName(quiz.title);
+        setPoints(quiz.points);
+        setDescription(quiz.description);
+        setDueDate(quiz.dueDate);
+        setAvailabilityDate(quiz.availabilityDate);
+        setQuizType(quiz.quizType);
+        setTimeLimit(quiz.timeLimit);
+        setAssignmentGroup(quiz.assignmentGroup);
+        setShuffleForEachStudent(quiz.shuffleForEachStudent);
+        setAllowMultipleAttempts(quiz.allowMultipleAttempts);
+        setIsPublished(quiz.isPublished);
+        setViewResponse(quiz.viewResponse);
+        setShowCorrectAnswers(quiz.showCorrectAnswers);
+        setAccessCode(quiz.accessCode);
+        setSingleQuestionAtATime(quiz.singleQuestionAtATime);
+        setCameraRequired(quiz.cameraRequired);
+        setLockQuestionsAfterAnswering(quiz.lockQuestionsAfterAnswering);
+        setLoading(false);
+    };
 
   useEffect(() => {
     const loadQuiz = async () => {
@@ -185,112 +191,98 @@ export default function QuizEditor() {
               }}
             />
 
-            {/* Display Answers */}
-            <div className="mt-2">
-              <label className="form-label">Answers</label>
-              {question.questionType === "Multiple Choice" ||
-              question.questionType === "Multiple Select" ? (
-                <ul>
-                  {question.choices.map((choice: any, choiceIndex: any) => (
-                    <li key={choiceIndex}>
-                      <input
-                        type="text"
-                        className="form-control d-inline-block me-2"
-                        value={choice.text}
-                        style={{ width: "80%" }}
-                        onChange={(e) => {
-                          const updatedQuestions = [...questions];
-                          updatedQuestions[index].choices[choiceIndex].text =
-                            e.target.value;
-                          setQuestions(updatedQuestions);
-                        }}
-                      />
-                      <input
-                        type="checkbox"
-                        className="form-check-input mt-2"
-                        checked={choice.isCorrect}
-                        style={{ border: "1px solid black" }}
-                        onChange={(e) => {
-                          const updatedQuestions = [...questions];
-                          updatedQuestions[index].choices[
-                            choiceIndex
-                          ].isCorrect = e.target.checked;
-                          setQuestions(updatedQuestions);
-                        }}
-                      />
-                      <span className="ms-2">Correct</span>
-                      <FaTrash
-                        className="mt-2 float-end"
-                        onClick={() => {
-                          const updatedQuestions = [...questions];
-                          updatedQuestions[index].choices.splice(
-                            choiceIndex,
-                            1
-                          );
-                          setQuestions(updatedQuestions);
-                        }}
-                      />
-                    </li>
-                  ))}
-                  <li>
-                    <button
-                      className="btn btn-primary btn-sm mt-2 mb-2"
-                      onClick={() => {
-                        const updatedQuestions = [...questions];
-                        updatedQuestions[index].choices.push({
-                          text: "",
-                          isCorrect: false,
-                        });
-                        setQuestions(updatedQuestions);
-                      }}
-                    >
-                      Add Option
-                    </button>
-                  </li>
-                </ul>
-              ) : question.questionType === "Fill in the Blanks" ? (
-                <input
-                  type="text"
-                  className="form-control"
-                  value={question.blanks[0]?.answer || ""}
-                  onChange={(e) => {
-                    const updatedQuestions = [...questions];
-                    if (updatedQuestions[index].blanks) {
-                      updatedQuestions[index].blanks[0].answer = e.target.value;
-                    }
-                    setQuestions(updatedQuestions);
-                  }}
-                />
-              ) : (
-                <div>
-                  <label
-                    htmlFor={`true-false-checkbox-${index}`}
-                    className="mb-2 me-2"
-                  >
-                    True
-                  </label>
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    style={{ border: "1px solid black" }}
-                    id={`true-false-checkbox-${index}`}
-                    checked={question.options[0]?.text === "True"}
-                    onChange={(e) => {
-                      const isTrue = e.target.checked;
-                      const updatedQuestions = [...questions];
-                      updatedQuestions[index].options = [
-                        { text: "True", isCorrect: isTrue },
-                        { text: "False", isCorrect: !isTrue },
-                      ];
-                      setQuestions(updatedQuestions);
-                    }}
-                  />
-                </div>
-              )}
+                        {/* Display Answers */}
+                        <div className="mt-2">
+                            <label className="form-label">Answers</label>
+                            {question.questionType === "Multiple Choice" || question.questionType === "Multiple Select" ? (
+                                <ul>
+                                    {question.choices && question.choices.length > 0 ? (
+                                        question.choices.map((choice: any, choiceIndex: number) => (
+                                            <li key={choiceIndex}>
+                                                <input type="text" className="form-control d-inline-block me-2"
+                                                    value={choice.text || ""} style={{ width: "80%" }}
+                                                    onChange={(e) => {
+                                                        const updatedQuestions = [...questions];
+                                                        updatedQuestions[index].choices[choiceIndex].text = e.target.value;
+                                                        setQuestions(updatedQuestions);
+                                                    }}/>
+                                                <input type="checkbox" checked={choice.isCorrect || false}
+                                                    className="form-check-input mt-2" style={{ border: "1px solid black" }}
+                                                    onChange={(e) => {
+                                                        const updatedQuestions = [...questions];
+                                                        updatedQuestions[index].choices[choiceIndex].isCorrect = e.target.checked;
+                                                        setQuestions(updatedQuestions);
+                                                    }}/>
+                                                <span className="ms-2">Correct</span>
+                                                <FaTrash className="mt-2 float-end"
+                                                    onClick={() => {
+                                                        const updatedQuestions = [...questions];
+                                                        updatedQuestions[index].choices.splice(choiceIndex, 1);
+                                                        setQuestions(updatedQuestions);
+                                                    }}/>
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <li>No choices available</li>
+                                    )}
+
+                                    <li>
+                                        <button
+                                            className="btn btn-primary btn-sm mt-2 mb-2"
+                                            onClick={() => {
+                                                const updatedQuestions = [...questions];
+                                                updatedQuestions[index].choices.push({ text: "", isCorrect: false });
+                                                setQuestions(updatedQuestions);
+                                            }}>
+                                            Add Option
+                                        </button>
+                                    </li>
+                                </ul>
+                            ) : question.questionType === "Fill in the Blanks" ? (
+                                question.blanks && question.blanks.length > 0 ? (
+                                    question.blanks.map((blank: any, blankIndex: number) => (
+                                        <input key={blankIndex} type="text" className="form-control mb-2"
+                                            value={blank.answer || ""}
+                                            onChange={(e) => {
+                                                const updatedQuestions = [...questions];
+                                                updatedQuestions[index].blanks[blankIndex].answer = e.target.value;
+                                                setQuestions(updatedQuestions);
+                                            }}/>
+                                    ))
+                                ) : (
+                                    <button className="btn btn-primary btn-sm"
+                                        onClick={() => {
+                                            const updatedQuestions = [...questions];
+                                            updatedQuestions[index].blanks = [{ answer: "" }];
+                                            setQuestions(updatedQuestions);
+                                        }}>
+                                            Add Blank
+                                    </button>
+                                )
+                            ) : question.questionType === "True/False" ? (
+                                <div>
+                                    <label htmlFor={`true-false-checkbox-${index}`} className="mb-2 me-2">True</label>
+                                    <input type="checkbox" className="form-check-input" style={{ border: "1px solid black" }}
+                                        id={`true-false-checkbox-${index}`} checked={question.choices[0]?.text === "True"}
+                                        onChange={(e) => {
+                                            const isTrue = e.target.checked;
+                                            const updatedQuestions = [...questions];
+                                            updatedQuestions[index].choices = [
+                                                { text: "True", isCorrect: isTrue },
+                                                { text: "False", isCorrect: !isTrue },
+                                            ];
+                                            setQuestions(updatedQuestions);
+                                        }}/>
+                                </div>
+                            ) : null}
+                        </div>
+                    </div>
+                ))}
+
             </div>
-          </div>
-        ))}
-      </div>
+
+
+
 
       <br />
       <br />
