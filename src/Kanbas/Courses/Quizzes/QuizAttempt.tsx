@@ -10,6 +10,21 @@ export default function QuizAttempt() {
   const [currentQuiz, setCurrentQuiz] = useState<any>({});
   const [startAttempt, setStartAttempt] = useState(false);
   const [currentAttempt, setCurrentAttempt] = useState<any>({});
+  // Add state for access code input
+  const [enteredAccessCode, setEnteredAccessCode] = useState("");
+  const [clickedAccessSubmit, setClickedAccessSubmit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Handle access code input
+  const handleAccessCodeSubmit = () => {
+    if (enteredAccessCode === currentQuiz.accessCode) {
+      setErrorMessage("");
+      setClickedAccessSubmit(true);
+      //   startQuiz(); // Proceed to start the quiz if the code matches
+    } else {
+      setErrorMessage("Incorrect access code. Please try again.");
+    }
+  };
 
   const getLatestAttempt = async () => {
     const response = await quizzesClient.getLatestAttempt(qid, currentUser._id);
@@ -203,9 +218,27 @@ export default function QuizAttempt() {
       </div>
       <hr />
 
-      <button onClick={startQuiz} disabled={!!latestAttempt}>
-        Start Quiz
-      </button>
+      {/* If quiz has access code, show input field for access code */}
+      {currentQuiz.accessCode && !latestAttempt && (
+        <div>
+          <label>Enter Access Code: </label>
+          <input
+            type="text"
+            value={enteredAccessCode}
+            onChange={(e) => setEnteredAccessCode(e.target.value)}
+            placeholder="Enter access code"
+          />
+          <button onClick={handleAccessCodeSubmit}>Submit</button>
+          {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
+        </div>
+      )}
+
+      {/* Only show the Start Quiz button if access code is correct or if the quiz has no access code */}
+      {!currentQuiz.accessCode || clickedAccessSubmit ? (
+        <button onClick={startQuiz} disabled={!!latestAttempt}>
+          Start Quiz
+        </button>
+      ) : null}
       <hr />
 
       {(latestAttempt || startAttempt) && currentQuiz.questions && (
