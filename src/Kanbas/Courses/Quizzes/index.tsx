@@ -152,6 +152,7 @@ export default function Quizzes() {
                   <QuizControlButtons
                     quizId={quiz._id}
                     deleteQuiz={(quizId) => removeQuiz(quizId)}
+                    quizPublish={quiz.isPublished}
                   />
                 ) : (
                   ""
@@ -162,7 +163,9 @@ export default function Quizzes() {
                       className="wd-quiz-link text-black"
                       style={{ textDecoration: "none" }}
                       onClick={() =>
-                        navigate(`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`)
+                        navigate(
+                          `/Kanbas/Courses/${cid}/QuizDetails/${quiz._id}`
+                        )
                       }
                     >
                       <strong>{quiz.title}</strong>
