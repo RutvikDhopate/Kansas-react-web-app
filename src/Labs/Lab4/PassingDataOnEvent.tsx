@@ -11,5 +11,5 @@ export default function PassingDataOnEvent() {
             </button>
             <hr />
         </div>
-    )
+    );
 }

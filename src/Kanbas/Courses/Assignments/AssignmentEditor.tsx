@@ -7,6 +7,7 @@ export default function AssignmentEditor({dialogTitle, assignmentName, setAssign
         addAssignment: () => void;
         })
     {
+        
         return (
             <div id="wd-add-module-dialog" className="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div className="modal-dialog">

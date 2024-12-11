@@ -18,7 +18,7 @@ export default function PeopleDetails() {
         setEditing(false);
         navigate(-1);
     };
-    const { uid} = useParams();
+    const { uid } = useParams();
     const [user, setUser] = useState<any>({});
     const navigate = useNavigate();
     const deleteUser = async (uid: string) => {
